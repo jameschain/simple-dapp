@@ -12,3 +12,7 @@ You need to write:
 (3.1) see the number of tokens on his balance
 (3.2) claim any amount of tokens to his address from the smart contract address
 (3.3) only the wallets among those five can claim tokens
+
+Please:
+⁃ structure everything in one repo that can be launched on localhost via hardhat.
+⁃ please provide docs.
