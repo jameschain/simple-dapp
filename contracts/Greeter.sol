@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Greeter is ERC20 {
     // userAddress => balance
-    mapping(address => uint256) public stakedBalance;
+    mapping(address => uint256) public claimableBalance;
     // userAddress => isClaimed boolean
-    mapping(address => bool) public isStaked;
+    mapping(address => bool) public isClaimable;
 
     event Claim(address indexed from, uint256 amount);
 
@@ -22,25 +22,25 @@ contract Greeter is ERC20 {
         uint256 addressLength = _addresses.length;
 
         for (uint256 i = 0; i < addressLength; i++) {
-            stakedBalance[_addresses[i]] = _balances[i];
+            claimableBalance[_addresses[i]] = _balances[i];
         }
     }
 
     function claim(uint256 amount) public {
         require(
-            isStaked[msg.sender] =
+            isClaimable[msg.sender] =
                 true &&
-                stakedBalance[msg.sender] >= amount,
-            "Nothing to claim"
+                claimableBalance[msg.sender] >= amount,
+            "Not a staked user or you tried to claim bigger amount"
         );
 
         uint256 balanceTransfer = amount;
         amount = 0;
-        stakedBalance[msg.sender] -= balanceTransfer;
+        claimableBalance[msg.sender] -= balanceTransfer;
         _mint(msg.sender, balanceTransfer);
 
-        if (stakedBalance[msg.sender] == 0) {
-            isStaked[msg.sender] = false;
+        if (claimableBalance[msg.sender] == 0) {
+            isClaimable[msg.sender] = false;
         }
         emit Claim(msg.sender, balanceTransfer);
     }
