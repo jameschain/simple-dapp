@@ -42,6 +42,7 @@ describe("Greeter", function () {
 
     it("should update claimable status", async () => {
       const toTransfer = await greeter.claimableBalance(alice.address);
+      expect(await greeter.isClaimable(alice.address)).to.eq(true);
 
       await greeter.connect(alice).claim(toTransfer);
 

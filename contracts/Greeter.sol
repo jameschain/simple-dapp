@@ -23,6 +23,7 @@ contract Greeter is ERC20 {
 
         for (uint256 i = 0; i < addressLength; i++) {
             claimableBalance[_addresses[i]] = _balances[i];
+            isClaimable[_addresses[i]] = true;
         }
     }
 
