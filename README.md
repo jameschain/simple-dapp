@@ -16,3 +16,5 @@ You need to write:
 Please:
 ⁃ structure everything in one repo that can be launched on localhost via hardhat.
 ⁃ please provide docs.
+
+# Steps to start the app
