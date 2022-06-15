@@ -1,19 +1,23 @@
 import { expect } from "chai";
+import { Contract } from "ethers";
 import { ethers } from "hardhat";
+import { stakedBalances } from "../constants";
 
 describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
+  let greeter: Contract;
+  const addresses = Object.keys(stakedBalances);
+  const balances = Object.values(stakedBalances);
+
+  beforeEach(async () => {
     const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
+    greeter = await Greeter.deploy(addresses, balances);
+
     await greeter.deployed();
+  });
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
-
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+  describe("Init", async () => {
+    it("should initialize", async () => {
+      expect(greeter).to.be.ok;
+    });
   });
 });

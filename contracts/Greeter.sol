@@ -1,22 +1,47 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract Greeter {
-    string private greeting;
+contract Greeter is ERC20 {
+    // userAddress => balance
+    mapping(address => uint256) public stakedBalance;
+    // userAddress => isClaimed boolean
+    mapping(address => bool) public isStaked;
 
-    constructor(string memory _greeting) {
-        console.log("Deploying a Greeter with greeting:", _greeting);
-        greeting = _greeting;
+    event Claim(address indexed from, uint256 amount);
+
+    constructor(address[] memory _addresses, uint256[] memory _balances)
+        ERC20("SSTOKEN", "SS")
+    {
+        require(
+            _addresses.length == _balances.length,
+            "Address and balance length not matching"
+        );
+
+        uint256 addressLength = _addresses.length;
+
+        for (uint256 i = 0; i < addressLength; i++) {
+            stakedBalance[_addresses[i]] = _balances[i];
+        }
     }
 
-    function greet() public view returns (string memory) {
-        return greeting;
-    }
+    function claim(uint256 amount) public {
+        require(
+            isStaked[msg.sender] =
+                true &&
+                stakedBalance[msg.sender] >= amount,
+            "Nothing to claim"
+        );
 
-    function setGreeting(string memory _greeting) public {
-        console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
-        greeting = _greeting;
+        uint256 balanceTransfer = amount;
+        amount = 0;
+        stakedBalance[msg.sender] -= balanceTransfer;
+        _mint(msg.sender, balanceTransfer);
+
+        if (stakedBalance[msg.sender] == 0) {
+            isStaked[msg.sender] = false;
+        }
+        emit Claim(msg.sender, balanceTransfer);
     }
 }
