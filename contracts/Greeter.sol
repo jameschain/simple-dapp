@@ -35,14 +35,12 @@ contract Greeter is ERC20 {
             "Not a staked user or you tried to claim bigger amount"
         );
 
-        uint256 balanceTransfer = amount;
-        amount = 0;
-        claimableBalance[msg.sender] -= balanceTransfer;
-        _mint(msg.sender, balanceTransfer);
+        claimableBalance[msg.sender] -= amount;
+        _mint(msg.sender, amount);
 
         if (claimableBalance[msg.sender] == 0) {
             isClaimable[msg.sender] = false;
         }
-        emit Claim(msg.sender, balanceTransfer);
+        emit Claim(msg.sender, amount);
     }
 }
