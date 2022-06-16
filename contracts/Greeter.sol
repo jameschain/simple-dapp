@@ -16,7 +16,7 @@ contract Greeter is ERC20 {
     {
         require(
             _addresses.length == _balances.length,
-            "Address and balance length not matching"
+            "Addresses and balances length not matching"
         );
 
         uint256 addressLength = _addresses.length;
@@ -32,7 +32,7 @@ contract Greeter is ERC20 {
             isClaimable[msg.sender] =
                 true &&
                 claimableBalance[msg.sender] >= amount,
-            "Not a staked user or you tried to claim bigger amount"
+            "Not a claimable user or you tried to claim bigger amount"
         );
 
         claimableBalance[msg.sender] -= amount;
